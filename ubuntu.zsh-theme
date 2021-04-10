@@ -1,15 +1,22 @@
-if [[ $UID -eq 0 ]]; then
-  local user_symbol='#'
-else
-  local user_symbol='$'
-fi
+return_code() {
+  echo "%(?..%{$fg_bold[red]%}↵%?%{$reset_color%})"
+}
 
-local return_code="%(?..%{$fg_bold[red]%}↵%?%{$reset_color%})"
-local git_info='$(git_prompt_info)'
+directory() {
+  echo "%{$fg_bold[blue]%}%2~%{$reset_color%}"
+}
 
-PROMPT="%{$fg_bold[green]%}%n@%m:%{$fg_bold[blue]%}%~%{$reset_color%}%{$user_symbol%}%{$return_code%}%{$git_info%}%{$reset_color%} "
+name() {
+  echo "%{$fg_bold[green]%}%n@%m%{$reset_color%}"
+}
+
+git () {
+  echo "$(git_prompt_info)"
+}
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[yellow]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="*"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
+
+PROMPT="$(name):$(directory)\$$(return_code)$(git) "
